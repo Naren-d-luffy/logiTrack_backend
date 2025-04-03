@@ -71,13 +71,10 @@ export const loginAdmin = async (req, res) => {
     if (!isMatch) return res.status(401).json({ message: "Invalid Password" });
 
     const payload = { id: admin.id, status: admin.status, role: admin.role };
-    const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET, 
-      // { expiresIn: "15m" }
-    );
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "7d" });
+    const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET);
 
     const { password: _, ...safeAdminData } = admin.toObject();
-    res.status(200).json({ message: "Login Successful", accessToken, refreshToken, admin: safeAdminData });
+    res.status(200).json({ message: "Login Successful", accessToken, admin: safeAdminData });
   } catch (error) {
     res.status(500).json({ error: "Login Failed", message: error.message });
   }
